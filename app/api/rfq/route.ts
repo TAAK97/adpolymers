@@ -10,19 +10,27 @@ export const dynamic = 'force-dynamic';
  * Bypasses Vercel's 4.5 MB Serverless Payload Limit.
  */
 export async function PUT(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
-
   try {
-    // Explicitly grab the token from environment variables
+    const body = (await request.json()) as HandleUploadBody;
+
+    // Explicitly grab the token from environment variables (checking standard & custom names)
     const blobToken =
       process.env.BLOB_READ_WRITE_TOKEN ||
       process.env.ADPOLYMERS_BLOB_READ_WRITE_TOKEN ||
       process.env.VERCEL_BLOB_READ_WRITE_TOKEN;
 
+    if (!blobToken) {
+      console.error('Vercel Blob token is missing in Environment Variables.');
+      return NextResponse.json(
+        { error: 'Server misconfiguration: Vercel Blob token is missing.' },
+        { status: 500 }
+      );
+    }
+
     const jsonResponse = await handleUpload({
       body,
       request,
-      token: blobToken, // Explicitly pass token to resolve credential errors
+      token: blobToken, // Explicitly pass token to resolve client credential errors
       onBeforeGenerateToken: async () => {
         return {
           allowedContentTypes: [
@@ -80,8 +88,16 @@ export async function POST(request: Request) {
       cadFileName,
     } = body;
 
+    // Guard clause: ensure valid form state before attempting dispatch
+    if (!email || !fullName) {
+      return NextResponse.json(
+        { error: 'Required form fields (fullName, email) are missing.' },
+        { status: 400 }
+      );
+    }
+
     await resend.emails.send({
-      from: 'AD RFQ Form <onboarding@resend.dev>', // Use verified domain once ready, e.g., info@adpolymers.in
+      from: 'AD RFQ Form <onboarding@resend.dev>', // Update to verified domain e.g., info@adpolymers.in once configured
       to: ['taakdhairya@gmail.com'],
       replyTo: email,
       subject: `📥 New RFQ Submission: ${company || fullName}`,
