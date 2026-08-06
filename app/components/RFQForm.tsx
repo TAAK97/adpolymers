@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { upload } from '@vercel/blob/client';
 
 interface FormData {
   fullName: string;
@@ -71,25 +72,38 @@ export default function RFQForm() {
     setLoading(true);
 
     try {
-      // Use Multipart FormData to transmit text + CAD file
-      const data = new FormData();
-      Object.entries(formData).forEach(([key, val]) => {
-        data.append(key, val);
-      });
+      let cadFileUrl = '';
+      let cadFileName = '';
 
+      // 1. Direct browser-to-Blob upload if file is attached
       if (cadFile) {
-        data.append('cadFile', cadFile);
+        cadFileName = cadFile.name;
+        const blob = await upload(cadFile.name, cadFile, {
+          access: 'public',
+          handleUploadUrl: '/api/rfq', // Authorizes via PUT in /api/rfq
+        });
+        cadFileUrl = blob.url;
       }
 
+      // 2. Submit clean JSON payload to /api/rfq
       const response = await fetch('/api/rfq', {
         method: 'POST',
-        body: data,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          cadFileUrl,
+          cadFileName,
+        }),
       });
+
+      const resData = await response.json();
 
       if (response.ok) {
         setSubmitted(true);
       } else {
-        alert('Something went wrong submitting your request.');
+        alert(resData.error || 'Something went wrong submitting your request.');
       }
     } catch (err) {
       console.error('Error submitting form:', err);
