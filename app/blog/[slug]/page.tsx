@@ -78,7 +78,7 @@ export default async function BlogPostPage({
       )}
 
       {/* Top-Class Technical Discussion Board */}
-      <BlogDiscussion />
+      <BlogDiscussion articleSlug={resolvedParams.slug} />
     </article>
   );
 }
