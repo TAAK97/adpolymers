@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://adpolymers.com';
+  const baseUrl = 'https://adpolymers.in';
 
   // Core Landing Pages
   const staticRoutes: MetadataRoute.Sitemap = [
