@@ -13,9 +13,16 @@ export async function PUT(request: Request): Promise<NextResponse> {
   const body = (await request.json()) as HandleUploadBody;
 
   try {
+    // Explicitly grab the token from environment variables
+    const blobToken =
+      process.env.BLOB_READ_WRITE_TOKEN ||
+      process.env.ADPOLYMERS_BLOB_READ_WRITE_TOKEN ||
+      process.env.VERCEL_BLOB_READ_WRITE_TOKEN;
+
     const jsonResponse = await handleUpload({
       body,
       request,
+      token: blobToken, // Explicitly pass token to resolve credential errors
       onBeforeGenerateToken: async () => {
         return {
           allowedContentTypes: [
@@ -74,7 +81,7 @@ export async function POST(request: Request) {
     } = body;
 
     await resend.emails.send({
-      from: 'AD RFQ Form <info@adpolymers.in>', // Use verified domain once ready, or 'onboarding@resend.dev'
+      from: 'AD RFQ Form <onboarding@resend.dev>', // Use verified domain once ready, e.g., info@adpolymers.in
       to: ['taakdhairya@gmail.com'],
       replyTo: email,
       subject: `📥 New RFQ Submission: ${company || fullName}`,
