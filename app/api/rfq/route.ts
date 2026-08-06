@@ -1,9 +1,52 @@
+import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
 // Defer static generation during build time
 export const dynamic = 'force-dynamic';
 
+/**
+ * 1. PUT Handler: Authorizes direct client-side uploads to Vercel Blob.
+ * Bypasses Vercel's 4.5 MB Serverless Payload Limit.
+ */
+export async function PUT(request: Request): Promise<NextResponse> {
+  const body = (await request.json()) as HandleUploadBody;
+
+  try {
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async () => {
+        return {
+          allowedContentTypes: [
+            'application/pdf',
+            'application/zip',
+            'application/x-zip-compressed',
+            'application/octet-stream', // Handles CAD files (.step, .stp, .stl, .dwg, etc.)
+            'image/jpeg',
+            'image/png',
+          ],
+          tokenPayload: JSON.stringify({}),
+        };
+      },
+      onUploadCompleted: async ({ blob }) => {
+        console.log('Vercel Blob upload completed successfully:', blob.url);
+      },
+    });
+
+    return NextResponse.json(jsonResponse);
+  } catch (error) {
+    console.error('Blob upload auth error:', error);
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 400 }
+    );
+  }
+}
+
+/**
+ * 2. POST Handler: Processes the RFQ submission & sends email via Resend.
+ */
 export async function POST(request: Request) {
   try {
     const apiKey = process.env.RESEND_API_KEY;
@@ -15,38 +58,26 @@ export async function POST(request: Request) {
       );
     }
 
-    // Initialize Resend dynamically inside request execution
     const resend = new Resend(apiKey);
+    const body = await request.json();
 
-    const formData = await request.formData();
-
-    const fullName = formData.get('fullName') as string;
-    const email = formData.get('email') as string;
-    const company = formData.get('company') as string;
-    const phone = formData.get('phone') as string;
-    const materialRequirements = formData.get('materialRequirements') as string;
-    const estimatedVolume = formData.get('estimatedVolume') as string;
-    const additionalNotes = formData.get('additionalNotes') as string;
-    const cadFile = formData.get('cadFile') as File | null;
-
-    // Prepare attachments array for Resend
-    const attachments = [];
-    if (cadFile && cadFile.size > 0) {
-      const bytes = await cadFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      attachments.push({
-        filename: cadFile.name,
-        content: buffer,
-      });
-    }
+    const {
+      fullName,
+      email,
+      company,
+      phone,
+      materialRequirements,
+      estimatedVolume,
+      additionalNotes,
+      cadFileUrl,
+      cadFileName,
+    } = body;
 
     await resend.emails.send({
-      from: 'AD RFQ Form <onboarding@resend.dev>',
+      from: 'AD RFQ Form <info@adpolymers.in>', // Use verified domain once ready, or 'onboarding@resend.dev'
       to: ['taakdhairya@gmail.com'],
       replyTo: email,
       subject: `📥 New RFQ Submission: ${company || fullName}`,
-      attachments: attachments.length > 0 ? attachments : undefined,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
           <h2 style="color: #2563eb; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">
@@ -55,9 +86,9 @@ export async function POST(request: Request) {
           
           <h3>01. Contact Information</h3>
           <ul style="list-style: none; padding-left: 0;">
-            <li><strong>Full Name:</strong> ${fullName}</li>
+            <li><strong>Full Name:</strong> ${fullName || 'Not provided'}</li>
             <li><strong>Work Email:</strong> <a href="mailto:${email}">${email}</a></li>
-            <li><strong>Company:</strong> ${company}</li>
+            <li><strong>Company:</strong> ${company || 'Not provided'}</li>
             <li><strong>Phone:</strong> ${phone || 'Not provided'}</li>
           </ul>
 
@@ -65,7 +96,11 @@ export async function POST(request: Request) {
           <ul style="list-style: none; padding-left: 0;">
             <li><strong>Polymer / Grade:</strong> ${materialRequirements || 'Not specified'}</li>
             <li><strong>Estimated Volume:</strong> ${estimatedVolume || 'Not specified'}</li>
-            <li><strong>CAD Attachment:</strong> ${cadFile && cadFile.size > 0 ? cadFile.name : 'No CAD file attached'}</li>
+            <li><strong>CAD Attachment:</strong> ${
+              cadFileUrl
+                ? `<a href="${cadFileUrl}" target="_blank" style="color: #2563eb; font-weight: bold;">Download ${cadFileName || 'CAD File'}</a>`
+                : 'No CAD file attached'
+            }</li>
           </ul>
 
           <h4>Engineering Notes:</h4>
@@ -77,10 +112,10 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to send RFQ email:', error);
     return NextResponse.json(
-      { error: 'Failed to send email notification' },
+      { error: error?.message || 'Failed to send email notification' },
       { status: 500 }
     );
   }
