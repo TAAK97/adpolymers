@@ -57,49 +57,70 @@ export default function BlogDiscussion({ articleSlug }: { articleSlug: string })
     };
 
     setComments([newComment, ...comments]);
+    setAuthor('');
+    setRole('');
+    setCompany('');
     setContent('');
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 4000);
   };
 
   return (
-    
-      
-        
-          
-            
-          
-          
-            Technical Peer Discussions
-            
-              Verified Q&A for process engineers, quality leads, and tooling technicians.
-            
-          
-        
-        
+    <section className="mt-12 pt-8 border-t border-slate-800">
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-cyan-400">
+            <MessageSquare className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-white tracking-tight">Technical Peer Discussions</h3>
+            <p className="text-xs text-slate-400">
+              Verified Q&amp;A for process engineers, quality leads, and tooling technicians.
+            </p>
+          </div>
+        </div>
+        <span className="text-xs font-mono text-cyan-400 bg-cyan-950/50 border border-cyan-500/30 px-3 py-1 rounded-full">
           {comments.length} Engineering Threads
-        
-      
+        </span>
+      </div>
 
       {/* Form to submit technical question */}
-      
-        
-           Post a Processing Question or Field Observation
-        
+      <form onSubmit={handleAddComment} className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 mb-8">
+        <h4 className="text-sm font-semibold text-slate-200 mb-4 flex items-center gap-2">
+          <UserCheck className="w-4 h-4 text-cyan-400" /> Post a Processing Question or Field Observation
+        </h4>
 
-        
-           setAuthor(e.target.value)}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <input
+            type="text"
+            placeholder="Your Name *"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            required
             className="bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500"
           />
-           setRole(e.target.value)}
+          <input
+            type="text"
+            placeholder="Role (e.g. Quality Engineer)"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
             className="bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500"
           />
-           setCompany(e.target.value)}
+          <input
+            type="text"
+            placeholder="Company / Organization"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
             className="bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500"
           />
-        
+        </div>
 
-         setContent(e.target.value)}
+        <textarea
+          rows={3}
+          placeholder="Detailed observation, polymer processing query, or parameter details... *"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          required
           className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 mb-4"
         />
 
