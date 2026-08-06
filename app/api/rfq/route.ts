@@ -1,10 +1,23 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Defer static generation during build time
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error('RESEND_API_KEY is missing from environment variables.');
+      return NextResponse.json(
+        { error: 'Server misconfiguration: missing API key' },
+        { status: 500 }
+      );
+    }
+
+    // Initialize Resend dynamically inside request execution
+    const resend = new Resend(apiKey);
+
     const formData = await request.formData();
 
     const fullName = formData.get('fullName') as string;
@@ -30,7 +43,7 @@ export async function POST(request: Request) {
 
     await resend.emails.send({
       from: 'AD RFQ Form <onboarding@resend.dev>',
-      to: ['taakdhairya@gmail.com'], // 👈 Your email address here
+      to: ['taakdhairya@gmail.com'],
       replyTo: email,
       subject: `📥 New RFQ Submission: ${company || fullName}`,
       attachments: attachments.length > 0 ? attachments : undefined,
