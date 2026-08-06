@@ -2,27 +2,24 @@ import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Defer static generation during build time
 export const dynamic = 'force-dynamic';
 
 /**
  * 1. PUT Handler: Authorizes direct client-side uploads to Vercel Blob.
- * Bypasses Vercel's 4.5 MB Serverless Payload Limit.
  */
 export async function PUT(request: Request): Promise<NextResponse> {
-  try {
-    const body = (await request.json()) as HandleUploadBody;
+  const body = (await request.json()) as HandleUploadBody;
 
-    // Explicitly grab the token from environment variables (checking standard & custom names)
+  try {
     const blobToken =
       process.env.BLOB_READ_WRITE_TOKEN ||
       process.env.ADPOLYMERS_BLOB_READ_WRITE_TOKEN ||
       process.env.VERCEL_BLOB_READ_WRITE_TOKEN;
 
     if (!blobToken) {
-      console.error('Vercel Blob token is missing in Environment Variables.');
+      console.error('CRITICAL: Vercel Blob token is missing in Environment Variables.');
       return NextResponse.json(
-        { error: 'Server misconfiguration: Vercel Blob token is missing.' },
+        { error: 'Server misconfiguration: Blob token missing.' },
         { status: 500 }
       );
     }
@@ -30,16 +27,18 @@ export async function PUT(request: Request): Promise<NextResponse> {
     const jsonResponse = await handleUpload({
       body,
       request,
-      token: blobToken, // Explicitly pass token to resolve client credential errors
+      token: blobToken,
       onBeforeGenerateToken: async () => {
         return {
+          // Allow all content types to prevent MIME type rejection on obscure CAD files
           allowedContentTypes: [
             'application/pdf',
             'application/zip',
             'application/x-zip-compressed',
-            'application/octet-stream', // Handles CAD files (.step, .stp, .stl, .dwg, etc.)
+            'application/octet-stream',
             'image/jpeg',
             'image/png',
+            'text/plain',
           ],
           tokenPayload: JSON.stringify({}),
         };
@@ -51,7 +50,7 @@ export async function PUT(request: Request): Promise<NextResponse> {
 
     return NextResponse.json(jsonResponse);
   } catch (error) {
-    console.error('Blob upload auth error:', error);
+    console.error('Blob upload auth error in PUT /api/rfq:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 400 }
@@ -88,16 +87,15 @@ export async function POST(request: Request) {
       cadFileName,
     } = body;
 
-    // Guard clause: ensure valid form state before attempting dispatch
     if (!email || !fullName) {
       return NextResponse.json(
-        { error: 'Required form fields (fullName, email) are missing.' },
+        { error: 'Required form fields are missing.' },
         { status: 400 }
       );
     }
 
     await resend.emails.send({
-      from: 'AD RFQ Form <onboarding@resend.dev>', // Update to verified domain e.g., info@adpolymers.in once configured
+      from: 'AD RFQ Form <onboarding@resend.dev>',
       to: ['taakdhairya@gmail.com'],
       replyTo: email,
       subject: `📥 New RFQ Submission: ${company || fullName}`,
