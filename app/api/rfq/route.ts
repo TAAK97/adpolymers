@@ -4,13 +4,10 @@ import { Resend } from 'resend';
 
 export const dynamic = 'force-dynamic';
 
-/**
- * 1. PUT Handler: Authorizes direct client-side uploads to Vercel Blob.
- */
-export async function PUT(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
-
+async function processBlobUpload(request: Request): Promise<NextResponse> {
   try {
+    const body = (await request.json()) as HandleUploadBody;
+
     const blobToken =
       process.env.BLOB_READ_WRITE_TOKEN ||
       process.env.ADPOLYMERS_BLOB_READ_WRITE_TOKEN ||
@@ -19,7 +16,7 @@ export async function PUT(request: Request): Promise<NextResponse> {
     if (!blobToken) {
       console.error('CRITICAL: Vercel Blob token is missing in Environment Variables.');
       return NextResponse.json(
-        { error: 'Server misconfiguration: Blob token missing.' },
+        { error: 'Server misconfiguration: Vercel Blob token is missing.' },
         { status: 500 }
       );
     }
@@ -30,16 +27,7 @@ export async function PUT(request: Request): Promise<NextResponse> {
       token: blobToken,
       onBeforeGenerateToken: async () => {
         return {
-          // Allow all content types to prevent MIME type rejection on obscure CAD files
-          allowedContentTypes: [
-            'application/pdf',
-            'application/zip',
-            'application/x-zip-compressed',
-            'application/octet-stream',
-            'image/jpeg',
-            'image/png',
-            'text/plain',
-          ],
+          allowedContentTypes: undefined, // Allows all file formats (.step, .pdf, .zip)
           tokenPayload: JSON.stringify({}),
         };
       },
@@ -50,7 +38,7 @@ export async function PUT(request: Request): Promise<NextResponse> {
 
     return NextResponse.json(jsonResponse);
   } catch (error) {
-    console.error('Blob upload auth error in PUT /api/rfq:', error);
+    console.error('Blob upload auth error in /api/rfq:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 400 }
@@ -59,9 +47,28 @@ export async function PUT(request: Request): Promise<NextResponse> {
 }
 
 /**
- * 2. POST Handler: Processes the RFQ submission & sends email via Resend.
+ * 1. PUT Handler: Authorizes direct client-side uploads to Vercel Blob.
+ */
+export async function PUT(request: Request): Promise<NextResponse> {
+  return processBlobUpload(request);
+}
+
+/**
+ * 2. POST Handler: Routes blob authorization OR submits RFQ email.
  */
 export async function POST(request: Request) {
+  // Clone request to check if payload is a Vercel Blob auth request
+  const requestClone = request.clone();
+  try {
+    const body = await requestClone.json();
+    if (body?.type === 'blob.generate-client-token') {
+      return processBlobUpload(request);
+    }
+  } catch {
+    // If body isn't JSON or blob token payload, fall through to email handler
+  }
+
+  // Handle Form Submission & Email Dispatch
   try {
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
