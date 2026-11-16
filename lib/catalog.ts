@@ -11,8 +11,8 @@ export const SERVICES: Service[] = [
   {
     slug: 'plastic-injection-moulding',
     name: 'Custom Plastic Injection Moulding',
-    title: 'Custom Plastic Injection Moulding Manufacturer, Himachal Pradesh',
-    description: 'Precision small-part plastic injection moulding (0.5–250 g) in engineering plastics — PA66-GF, PC, POM, ABS, PP, SAN. Tier-1 supplier to Indian OEMs since 2010.',
+    title: 'Custom Plastic Injection Moulding Manufacturer in Parwanoo, HP',
+    description: 'Precision small-part plastic injection moulding (0.5–250 g) in engineering plastics — PA66-GF, PC, POM, ABS, PP, SAN. Tier-1 supplier to Indian OEMs since 2009.',
     h1: 'Custom Plastic Injection Moulding',
     intro: 'AD Polymers moulds high-tolerance small plastic components — from 0.5 g clips to 250 g housings — for automotive, water-filtration and hardware OEMs. We run multi-cavity tools on automated machines with robotic part extraction, so every batch is consistent from the first shot to the millionth.',
     points: [
@@ -69,8 +69,8 @@ export const SERVICES: Service[] = [
   {
     slug: 'tooling-and-mould-design',
     name: 'Tooling & Mould Design',
-    title: 'Injection Mould Design & Tooling – In-House Toolroom, HP',
-    description: 'In-house injection mould design and toolroom: CNC, EDM, P20/H13 steel moulds, multi-cavity and hot-runner tools, mould maintenance. AD Polymers, Himachal Pradesh.',
+    title: 'Injection Mould Design & Tooling – In-House Toolroom, Parwanoo',
+    description: 'In-house injection mould design and toolroom: CNC, EDM, P20/H13 steel moulds, multi-cavity and hot-runner tools, mould maintenance. AD Polymers, Parwanoo, HP.',
     h1: 'Injection Mould Design & Tooling',
     intro: 'Our in-house toolroom designs, builds and maintains the moulds that run on our machines — so tooling, trials and corrections happen under one roof, and production starts sooner.',
     points: [
@@ -120,6 +120,25 @@ export const SERVICES: Service[] = [
     ],
     faqs: [
       { q: 'Can you supply moulded parts as finished assemblies?', a: 'Yes. Tell us the assembly and test requirements and we will quote moulding, assembly and testing together.' },
+    ],
+  },
+  {
+    // TODO(owner): confirm ply options (3/5/7-ply), printing and minimum order, then add them to `points`.
+    slug: 'custom-corrugated-boxes',
+    name: 'Custom Corrugated Boxes',
+    title: 'Custom Corrugated Box Manufacturer in Parwanoo, Himachal Pradesh',
+    description: 'Custom-size corrugated boxes and cartons made in our own box unit in Parwanoo, HP — for packing moulded components and for other manufacturers in the region.',
+    h1: 'Custom Corrugated Boxes & Packaging',
+    intro: 'Alongside our moulding plant, AD Polymers runs its own corrugated box unit in Parwanoo. We make boxes to the exact size your parts need — so moulded components ship protected, and you deal with one supplier for parts and packaging.',
+    points: [
+      'Corrugated boxes and cartons made to your dimensions',
+      'Packaging designed around the moulded parts we make for you',
+      'Boxes supplied to other manufacturers in the Parwanoo–Baddi–Solan region',
+      'One supplier and one invoice for parts and their packaging',
+    ],
+    faqs: [
+      { q: 'Do you make corrugated boxes for other companies?', a: 'Yes. Our box unit in Parwanoo makes custom-size corrugated boxes for other manufacturers as well as for packing our own moulded parts. Share the box size and quantity for a quote.' },
+      { q: 'Can you pack moulded parts in custom boxes?', a: 'Yes. Because the box unit is on site, we size and make the cartons for your parts and ship them packed, ready for your line or warehouse.' },
     ],
   },
 ];

@@ -6,16 +6,16 @@ import { SITE } from '@/lib/site';
 import { FaqSection } from './components/PageParts';
 
 export const metadata = pageMeta({
-  title: 'Plastic Injection Moulding Manufacturer in Himachal Pradesh | AD Polymers',
+  title: 'Plastic Injection Moulding Manufacturer in Parwanoo, Himachal Pradesh | AD Polymers',
   description:
-    'Precision small-part plastic injection moulding since 2010: glass-filled nylon, POM, PC & SAN parts, insert moulding and in-house tooling for Maruti Suzuki, Aquaguard & Ozone supply chains.',
+    'Precision small-part plastic injection moulding in Parwanoo, HP since 2009: glass-filled nylon, POM, PC & SAN parts, insert moulding and in-house tooling for Maruti Suzuki, Aquaguard & Ozone supply chains.',
   path: '/',
   absoluteTitle: true,
 });
 
 const faqs: Faq[] = [
   { q: 'What does AD Polymers manufacture?', a: `AD Polymers manufactures precision small plastic components (${SITE.shotRange} shot weight) by injection moulding — clips, fasteners, bushings, filter housings, fittings and insert-moulded parts in engineering plastics such as PA66-GF, POM, PC, ABS, PP and SAN.` },
-  { q: 'Where is AD Polymers located?', a: `Our moulding plant and toolroom are in ${SITE.state}, India. We supply OEMs and tier suppliers across India.` },
+  { q: 'Where is AD Polymers located?', a: `Our moulding plant and toolroom are in ${SITE.city}, ${SITE.state}, India, alongside our own corrugated box unit for custom packaging. We supply OEMs and tier suppliers across India.` },
   { q: 'Which industries do you supply?', a: 'Automotive (Maruti Suzuki supply chains), water filtration (Aquaguard), architectural hardware (Ozone), electrical components and consumer products.' },
   { q: 'How do I get a quote for injection moulded parts?', a: 'Upload your STEP/CAD file on our Request a Quote page, or try the free Instant Quote tool with an STL file for an immediate estimate of part weight, machine tonnage and indicative price.' },
 ];
@@ -33,7 +33,7 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-slate-900/90 border border-cyan-500/30 rounded-full mb-6 shadow-[0_0_15px_rgba(34,211,238,0.15)]">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               <span className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-300">
-                Himachal Pradesh, India &bull; Tier-1 Contract Supplier
+                Parwanoo, Himachal Pradesh &bull; Since 2009 &bull; Tier-1 Contract Supplier
               </span>
             </div>
 

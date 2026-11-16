@@ -7,7 +7,7 @@ import JsonLd from './components/JsonLd';
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.adpolymers.in'),
   title: {
-    default: 'AD Polymers | Precision Plastic Injection Moulding, Himachal Pradesh',
+    default: 'AD Polymers | Plastic Injection Moulding, Parwanoo (HP)',
     template: '%s | AD Polymers',
   },
   description:
