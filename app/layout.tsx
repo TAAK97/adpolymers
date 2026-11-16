@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import JsonLd from './components/JsonLd';
+import MobileActionBar from './components/MobileActionBar';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.adpolymers.in'),
@@ -54,11 +55,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en-IN" className="dark">
-      <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+      <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased pb-16 lg:pb-0">
         <JsonLd />
         <Navbar />
         <div className="grow">{children}</div>
         <Footer />
+        <MobileActionBar />
       </body>
     </html>
   );
