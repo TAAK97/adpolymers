@@ -40,6 +40,7 @@ export default function Footer() {
             <li><Link href="/tools/instant-quote" className="hover:text-cyan-400 transition">Instant Quote (STL)</Link></li>
             <li><Link href="/tools/clamping-force-calculator" className="hover:text-cyan-400 transition">Tonnage Calculator</Link></li>
             <li><Link href="/blog" className="hover:text-cyan-400 transition">Technical Journal</Link></li>
+            <li><Link href="/about" className="hover:text-cyan-400 transition">About Us</Link></li>
             <li><Link href="/contact" className="hover:text-cyan-400 transition">Request a Quote</Link></li>
           </ul>
         </div>
@@ -62,7 +63,7 @@ export default function Footer() {
           <ul className="space-y-3 text-xs">
             <li className="flex items-start gap-2">
               <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-              <a href={SITE.mapsUrl} rel="noopener" className="hover:text-cyan-400 transition">{SITE.state}, India<br /><span className="text-cyan-400">View on Google Maps</span></a>
+              <a href={SITE.mapsUrl} rel="noopener" className="hover:text-cyan-400 transition">{SITE.city}, {SITE.state}, India<br /><span className="text-cyan-400">View on Google Maps</span></a>
             </li>
             <li className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-cyan-400 shrink-0" />

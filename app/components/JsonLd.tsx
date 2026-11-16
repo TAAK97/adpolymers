@@ -13,7 +13,7 @@ export default function JsonLd() {
         logo: `${SITE.url}/logo.png`,
         image: `${SITE.url}/og-image.png`,
         description:
-          'AD Polymers is a precision small-part plastic injection moulding manufacturer in Himachal Pradesh, India, supplying engineering plastic components, insert moulding and tooling to automotive, water-filtration and hardware OEMs.',
+          'AD Polymers is a precision small-part plastic injection moulding manufacturer in Parwanoo, Himachal Pradesh, India, established in 2009, supplying engineering plastic components, insert moulding and tooling to automotive, water-filtration and hardware OEMs.',
         foundingDate: SITE.founded,
         telephone: SITE.phone,
         email: SITE.email,

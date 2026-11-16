@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Cpu, Cog, Layers, Wrench, Boxes, FlaskConical, CheckCircle2 } from 'lucide-react';
+import { Cpu, Cog, Layers, Wrench, Boxes, FlaskConical, Package, CheckCircle2 } from 'lucide-react';
 import { SERVICES } from '@/lib/catalog';
 import { pageMeta, serviceSchema } from '@/lib/seo';
 import { Breadcrumbs, CtaBand, PageHeader, StructuredData } from '../components/PageParts';
@@ -11,11 +11,12 @@ const ICONS = {
   'tooling-and-mould-design': Wrench,
   'rapid-prototyping': FlaskConical,
   'secondary-operations': Cog,
+  'custom-corrugated-boxes': Package,
 } as const;
 
 export const metadata = pageMeta({
   title: 'Injection Moulding Services – Insert Moulding, Tooling & Assembly',
-  description: 'Custom plastic injection moulding, insert moulding, overmoulding, in-house mould tooling, rapid prototyping and assembly for OEMs. AD Polymers, Himachal Pradesh.',
+  description: 'Custom plastic injection moulding, insert moulding, overmoulding, in-house mould tooling, rapid prototyping and assembly for OEMs. AD Polymers, Parwanoo, HP.',
   path: '/services',
 });
 

@@ -29,8 +29,8 @@ export default function BlogPage() {
 
       {posts.length === 0 ? (
         <div className="text-center py-16 bg-slate-900/40 border border-slate-800 rounded-2xl">
-          <p className="text-slate-400 text-sm font-mono">No published technical articles found in /content/blog yet.</p>
-          <p className="text-xs text-slate-500 mt-2">Run your Python auto-publisher to generate compliance articles.</p>
+          <p className="text-slate-300">New technical articles are on the way.</p>
+          <p className="text-sm text-slate-500 mt-2">Meanwhile, compare resins in our <Link className="text-cyan-400" href="/materials">materials guide</Link>.</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-8">

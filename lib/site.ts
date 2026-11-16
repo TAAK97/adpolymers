@@ -4,9 +4,8 @@ export const SITE = {
   name: 'AD Polymers',
   url: 'https://www.adpolymers.in',
   tagline: 'Precision Small-Part Injection Moulding',
-  founded: '2010',
-  // TODO: add the town/city (e.g. the industrial area) once confirmed — used in headings & schema.
-  city: '',
+  founded: '2009',
+  city: 'Parwanoo',
   state: 'Himachal Pradesh',
   country: 'IN',
   mapsUrl: 'https://maps.app.goo.gl/RCUiEoTmuPRRo6c17',
@@ -15,6 +14,7 @@ export const SITE = {
   whatsapp: '919218534113',
   email: 'info@adpolymers.in',
   shotRange: '0.5 g – 250 g',
+  machines: 5,
   clients: ['Maruti Suzuki', 'Aquaguard', 'Ozone'],
 } as const;
 

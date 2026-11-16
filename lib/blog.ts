@@ -14,6 +14,30 @@ export interface BlogPost {
   keywords: string[];
   content: string;
   readingTime: string;
+  author: string;
+  updated: string;
+  faqs: { q: string; a: string }[];
+}
+
+// Builds a post from front matter. Old files without author/faqs still work.
+const day = (v: unknown) => (v instanceof Date ? v.toISOString().slice(0, 10) : String(v ?? ''));
+
+function toPost(slug: string, data: Record<string, unknown>, content: string): BlogPost {
+  const words = content.split(/\s+/).filter(Boolean).length;
+  return {
+    slug,
+    title: String(data.title ?? ''),
+    date: day(data.date),
+    category: String(data.category ?? 'Engineering'),
+    excerpt: String(data.excerpt ?? ''),
+    metaDescription: String(data.metaDescription ?? data.excerpt ?? ''),
+    keywords: Array.isArray(data.keywords) ? (data.keywords as string[]) : [],
+    content,
+    readingTime: String(data.readingTime ?? `${Math.max(1, Math.round(words / 220))} min read`),
+    author: String(data.author ?? 'harish-kumar'),
+    updated: day(data.updated ?? data.date),
+    faqs: Array.isArray(data.faqs) ? (data.faqs as { q: string; a: string }[]) : [],
+  };
 }
 
 export function getAllPosts(): BlogPost[] {
@@ -29,19 +53,9 @@ export function getAllPosts(): BlogPost[] {
       const fullPath = path.join(postsDirectory, fileName);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data, content } = matter(fileContents);
-
-      return {
-        slug,
-        title: data.title || '',
-        date: data.date || '',
-        category: data.category || 'Engineering',
-        excerpt: data.excerpt || '',
-        metaDescription: data.metaDescription || '',
-        keywords: data.keywords || [],
-        content,
-        readingTime: data.readingTime || '5 min read',
-      } as BlogPost;
-    });
+      return toPost(slug, data, content);
+    })
+    .filter((p) => p.title && !/^_/.test(p.slug));
 
   return allPosts.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
@@ -53,18 +67,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
 
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
-
-    return {
-      slug,
-      title: data.title || '',
-      date: data.date || '',
-      category: data.category || 'Engineering',
-      excerpt: data.excerpt || '',
-      metaDescription: data.metaDescription || '',
-      keywords: data.keywords || [],
-      content,
-      readingTime: data.readingTime || '5 min read',
-    } as BlogPost;
+    return toPost(slug, data, content);
   } catch {
     return null;
   }

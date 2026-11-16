@@ -4,7 +4,8 @@ import type { Metadata } from 'next';
 import { markdownToHtml } from '@/lib/markdown';
 import { pageMeta } from '@/lib/seo';
 import { ORG_ID, SITE } from '@/lib/site';
-import { Breadcrumbs, StructuredData } from '@/app/components/PageParts';
+import { Breadcrumbs, FaqSection, StructuredData } from '@/app/components/PageParts';
+import { findAuthor, personSchema } from '@/lib/authors';
 import Link from 'next/link';
 import { ArrowLeft, Clock, Calendar, Tag } from 'lucide-react';
 import BlogDiscussion from '@/app/components/BlogDiscussion';
@@ -37,6 +38,7 @@ export default async function BlogPostPage({
   }
 
   const path = `/blog/${post.slug}`;
+  const author = findAuthor(post.author);
 
   return (
     <>
@@ -46,9 +48,9 @@ export default async function BlogPostPage({
         headline: post.title,
         description: post.metaDescription || post.excerpt,
         datePublished: post.date,
-        dateModified: post.date,
+        dateModified: post.updated || post.date,
         image: [`${SITE.url}/og-image.png`],
-        author: { '@id': ORG_ID },
+        author: personSchema(author),
         publisher: { '@id': ORG_ID },
         mainEntityOfPage: `${SITE.url}${path}`,
         keywords: post.keywords.join(', '),
@@ -63,7 +65,7 @@ export default async function BlogPostPage({
           className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          {"Back to Journal Index"}
+          {"Back to the blog"}
         </Link>
       </div>
 
@@ -92,6 +94,15 @@ export default async function BlogPostPage({
         <p className="text-lg text-slate-300 leading-relaxed">
           {post.excerpt}
         </p>
+
+        <p className="text-sm text-slate-400">
+          By{' '}
+          <Link href={`/about#${author.slug}`} className="font-semibold text-slate-200 hover:text-cyan-400">
+            {author.name}
+          </Link>
+          , {author.role}, AD Polymers
+          {post.updated && post.updated !== post.date && <> · Updated {post.updated}</>}
+        </p>
       </header>
 
       {/* Render Content */}
@@ -99,6 +110,19 @@ export default async function BlogPostPage({
         className="prose-ad max-w-none my-10"
         dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }}
       />
+
+      {post.faqs.length > 0 && (
+        <div className="-mx-6">
+          <FaqSection faqs={post.faqs} />
+        </div>
+      )}
+
+      {/* Author box */}
+      <div className="my-10 p-6 rounded-2xl bg-slate-900/60 border border-slate-800">
+        <p className="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-2">About the author</p>
+        <p className="font-bold text-white">{author.name} · {author.role}</p>
+        <p className="text-sm text-slate-400 mt-2 leading-relaxed">{author.bio}</p>
+      </div>
 
       {/* Keywords Tag Cloud */}
       {post.keywords && post.keywords.length > 0 && (

@@ -29,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     u('/tools/clamping-force-calculator', 0.8),
     u('/blog', 0.7, 'weekly'),
     ...getAllPosts().map((p) => u(`/blog/${p.slug}`, 0.6, 'monthly', date(p.date))),
+    u('/about', 0.7),
     u('/contact', 0.9),
   ];
 }
