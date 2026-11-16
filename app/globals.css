@@ -17,3 +17,24 @@
 .bg-radial-mask {
   mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%);
 }
+/* Article body styling for markdown content (blog + projects) */
+.prose-ad { color: rgb(203 213 225); line-height: 1.75; font-size: 1rem; }
+.prose-ad h2 { color: #fff; font-size: 1.6rem; font-weight: 800; margin: 2.2rem 0 0.9rem; }
+.prose-ad h3 { color: #fff; font-size: 1.25rem; font-weight: 700; margin: 1.8rem 0 0.7rem; }
+.prose-ad h4 { color: #e2e8f0; font-weight: 700; margin: 1.4rem 0 0.5rem; }
+.prose-ad p { margin: 0 0 1.1rem; }
+.prose-ad ul, .prose-ad ol { margin: 0 0 1.2rem 1.3rem; }
+.prose-ad ul { list-style: disc; }
+.prose-ad ol { list-style: decimal; }
+.prose-ad li { margin: 0.35rem 0; }
+.prose-ad li::marker { color: rgb(34 211 238); }
+.prose-ad strong { color: #fff; }
+.prose-ad a { color: rgb(34 211 238); text-decoration: underline; }
+.prose-ad hr { border-color: rgb(30 41 59); margin: 2rem 0; }
+.prose-ad code { background: rgb(15 23 42); border: 1px solid rgb(30 41 59); border-radius: 4px; padding: 0.1rem 0.35rem; font-size: 0.875em; }
+.prose-ad pre { background: rgb(15 23 42); border: 1px solid rgb(30 41 59); border-radius: 12px; padding: 1rem; overflow-x: auto; margin: 0 0 1.2rem; }
+.prose-ad pre code { background: none; border: 0; padding: 0; }
+.prose-ad blockquote { border-left: 3px solid rgb(34 211 238); padding-left: 1rem; color: rgb(148 163 184); margin: 0 0 1.2rem; }
+.prose-ad table { width: 100%; border-collapse: collapse; margin: 0 0 1.2rem; font-size: 0.9rem; }
+.prose-ad th, .prose-ad td { border-bottom: 1px solid rgb(30 41 59); padding: 0.55rem 0.75rem; text-align: left; }
+.prose-ad th { color: #fff; }

@@ -1,5 +1,12 @@
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/blog';
+import { pageMeta } from '@/lib/seo';
+
+export const metadata = pageMeta({
+  title: 'Injection Moulding Engineering Blog – Technical Journal',
+  description: 'Technical articles on engineering plastics, resin processing, tooling and OEM quality standards from the AD Polymers moulding team.',
+  path: '/blog',
+});
 
 export default function BlogPage() {
   const posts = getAllPosts();

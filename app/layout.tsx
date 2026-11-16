@@ -7,7 +7,7 @@ import JsonLd from './components/JsonLd';
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.adpolymers.in'),
   title: {
-    default: 'AD Polymers | Precision Injection Moulding India',
+    default: 'AD Polymers | Precision Plastic Injection Moulding, Himachal Pradesh',
     template: '%s | AD Polymers',
   },
   description:
@@ -24,15 +24,13 @@ export const metadata: Metadata = {
   authors: [{ name: 'AD Polymers' }],
   creator: 'AD Polymers',
   publisher: 'AD Polymers',
-  alternates: {
-    canonical: 'https://www.adpolymers.in',
-  },
   openGraph: {
     title: 'AD Polymers | Precision Injection Moulding India',
     description:
       'High-tolerance engineering plastic moulding for automotive, electronics, and consumer hardware leaders.',
     url: 'https://www.adpolymers.in',
     siteName: 'AD Polymers',
+    images: ['/og-image.png'],
     locale: 'en_IN',
     type: 'website',
   },
@@ -55,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en-IN" className="dark">
       <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
         <JsonLd />
         <Navbar />

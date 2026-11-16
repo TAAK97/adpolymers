@@ -1,8 +1,28 @@
-import { getPostBySlug } from '@/lib/blog';
+import { getAllPosts, getPostBySlug } from '@/lib/blog';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+import { markdownToHtml } from '@/lib/markdown';
+import { pageMeta } from '@/lib/seo';
+import { ORG_ID, SITE } from '@/lib/site';
+import { Breadcrumbs, StructuredData } from '@/app/components/PageParts';
 import Link from 'next/link';
 import { ArrowLeft, Clock, Calendar, Tag } from 'lucide-react';
 import BlogDiscussion from '@/app/components/BlogDiscussion';
+
+export function generateStaticParams() {
+  return getAllPosts().map((p) => ({ slug: p.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const post = getPostBySlug((await params).slug);
+  if (!post) return {};
+  return pageMeta({
+    title: post.title,
+    description: post.metaDescription || post.excerpt,
+    path: `/blog/${post.slug}`,
+    type: 'article',
+  });
+}
 
 export default async function BlogPostPage({
   params,
@@ -16,12 +36,30 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  const path = `/blog/${post.slug}`;
+
   return (
+    <>
+    <StructuredData
+      nodes={[{
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.metaDescription || post.excerpt,
+        datePublished: post.date,
+        dateModified: post.date,
+        image: [`${SITE.url}/og-image.png`],
+        author: { '@id': ORG_ID },
+        publisher: { '@id': ORG_ID },
+        mainEntityOfPage: `${SITE.url}${path}`,
+        keywords: post.keywords.join(', '),
+      }]}
+    />
+    <Breadcrumbs crumbs={[{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }, { name: post.title, path }]} />
     <article className="max-w-4xl mx-auto px-4 py-12">
       {/* Back Link */}
       <div className="mb-8">
         <Link 
-          href="/journal" 
+          href="/blog" 
           className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -58,8 +96,8 @@ export default async function BlogPostPage({
 
       {/* Render Content */}
       <div 
-        className="prose prose-invert max-w-none my-10" 
-        dangerouslySetInnerHTML={{ __html: post.content }} 
+        className="prose-ad max-w-none my-10"
+        dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }}
       />
 
       {/* Keywords Tag Cloud */}
@@ -80,5 +118,6 @@ export default async function BlogPostPage({
       {/* Top-Class Technical Discussion Board */}
       <BlogDiscussion articleSlug={resolvedParams.slug} />
     </article>
+    </>
   );
 }
