@@ -36,7 +36,7 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-slate-900/90 border border-cyan-500/30 rounded-full mb-6 shadow-[0_0_15px_rgba(34,211,238,0.15)]">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               <span className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-300">
-                Parwanoo, HP &bull; Since {SITE.founded} &bull; Tier-1 Supplier
+                {`Parwanoo, HP • Since ${SITE.founded} • Tier-1 Supplier`}
               </span>
             </div>
 
@@ -48,7 +48,7 @@ export default function Home() {
             </h1>
 
             <p className="text-lg sm:text-xl text-slate-300 max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
-              Engineering-grade plastic components, insert moulding and in-house tooling, made in {SITE.city} for India&apos;s leading automotive, water-filtration and hardware OEMs.
+              Engineering-grade plastic components, insert moulding and in-house tooling, made in {SITE.city}{' '}for India&apos;s leading automotive, water-filtration and hardware OEMs.
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4">
@@ -83,7 +83,7 @@ export default function Home() {
             { k: 'Mould building', v: 'In-house toolroom' },
             { k: 'Packaging', v: 'Own box unit' },
           ].map((f) => (
-            <div key={f.k} className="text-center md:text-left md:border-l md:border-slate-800 md:pl-6 md:first:border-l-0 md:first:pl-0">
+            <div key={f.k} className="text-center md:text-left md:border-l md:border-slate-800 md:pl-6 md:first:border-l-0 md:first:pl-0 last:col-span-2 md:last:col-span-1">
               <dd className="text-2xl sm:text-3xl font-black text-white">{f.v}</dd>
               <dt className="mt-1 text-xs font-mono uppercase tracking-widest text-slate-400">{f.k}</dt>
             </div>

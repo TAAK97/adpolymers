@@ -15,7 +15,7 @@ export default function HeroPart() {
   useEffect(() => {
     setReduce(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }, []);
-  useMeshViewer(canvasRef, tris, geo, { spin: reduce ? 0 : 0.006, fill: 0.72 });
+  useMeshViewer(canvasRef, tris, geo, { spin: reduce ? 0 : 0.006, fill: 0.5 });
 
   return (
     <figure className="relative">

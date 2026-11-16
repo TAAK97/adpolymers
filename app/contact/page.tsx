@@ -21,7 +21,7 @@ export default function ContactPage() {
           <span className="block text-xs font-mono uppercase tracking-widest text-cyan-400 mb-1">WhatsApp</span>Chat with our team
         </a>
         <a href={SITE.mapsUrl} rel="noopener" className="p-5 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-cyan-500/50">
-          <span className="block text-xs font-mono uppercase tracking-widest text-cyan-400 mb-1">Factory</span>{SITE.city}, {SITE.state} · Directions &rarr;
+          <span className="block text-xs font-mono uppercase tracking-widest text-cyan-400 mb-1">Factory</span>{`${SITE.city}, ${SITE.state} · Directions →`}
         </a>
       </div>
     </main>
