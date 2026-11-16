@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { ShieldCheck, MapPin, Mail, Phone } from 'lucide-react';
+import { INDUSTRIES } from '@/lib/catalog';
+import { SITE } from '@/lib/site';
 
 export default function Footer() {
   return (
@@ -30,38 +32,45 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-widest">Navigation</h4>
+          <p className="text-white font-bold mb-4 text-xs uppercase tracking-widest">Navigation</p>
           <ul className="space-y-2.5 text-xs">
             <li><Link href="/services" className="hover:text-cyan-400 transition">Services & Capabilities</Link></li>
             <li><Link href="/materials" className="hover:text-cyan-400 transition">Engineering Polymers</Link></li>
-            <li><Link href="/industries" className="hover:text-cyan-400 transition">OEM Partners</Link></li>
+            <li><Link href="/projects" className="hover:text-cyan-400 transition">Projects & Case Studies</Link></li>
+            <li><Link href="/tools/instant-quote" className="hover:text-cyan-400 transition">Instant Quote (STL)</Link></li>
+            <li><Link href="/tools/clamping-force-calculator" className="hover:text-cyan-400 transition">Tonnage Calculator</Link></li>
             <li><Link href="/blog" className="hover:text-cyan-400 transition">Technical Journal</Link></li>
+            <li><Link href="/contact" className="hover:text-cyan-400 transition">Request a Quote</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-widest">OEM Focus</h4>
+          <p className="text-white font-bold mb-4 text-xs uppercase tracking-widest">Industries</p>
           <ul className="space-y-2.5 text-xs">
-            <li><span className="text-slate-300">Maruti Suzuki</span> — Fasteners & Interiors</li>
-            <li><span className="text-slate-300">Aquaguard</span> — Filter Housings</li>
-            <li><span className="text-slate-300">Ozone</span> — Architectural Fittings</li>
+            {INDUSTRIES.map((i) => (
+              <li key={i.slug}>
+                <Link href={`/industries/${i.slug}`} className="hover:text-cyan-400 transition">
+                  {i.client ? <><span className="text-slate-300">{i.client}</span> — {i.name}</> : i.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
         <div>
-          <h4 className="text-white font-bold mb-4 text-xs uppercase tracking-widest">Manufacturing Unit</h4>
+          <p className="text-white font-bold mb-4 text-xs uppercase tracking-widest">Manufacturing Unit</p>
           <ul className="space-y-3 text-xs">
             <li className="flex items-start gap-2">
               <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-              <span>Himachal Pradesh, India</span>
+              <a href={SITE.mapsUrl} rel="noopener" className="hover:text-cyan-400 transition">{SITE.state}, India<br /><span className="text-cyan-400">View on Google Maps</span></a>
             </li>
             <li className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
-              <span>rfq@adpolymers.in</span>
+              <a href={`mailto:${SITE.email}`} className="hover:text-cyan-400 transition">{SITE.email}</a>
             </li>
             <li className="flex items-center gap-2">
               <Phone className="w-4 h-4 text-cyan-400 shrink-0" />
-              <span>+91 9218534113</span>
+              <a href={SITE.phoneHref} className="hover:text-cyan-400 transition">{SITE.phone}</a>
             </li>
           </ul>
         </div>
@@ -69,7 +78,7 @@ export default function Footer() {
 
       <div className="border-t border-slate-900 py-6 bg-slate-950/50">
         <div className="max-w-7xl mx-auto px-6 text-center text-xs text-slate-500">
-          &copy; {new Date().getFullYear()} AD Polymers Inc. All Rights Reserved. Precision Small-Part Moulding Division.
+          &copy; {new Date().getFullYear()} AD Polymers. All Rights Reserved. Est. {SITE.founded}. Precision Small-Part Moulding Division.
         </div>
       </div>
     </footer>

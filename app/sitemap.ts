@@ -1,76 +1,34 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
+import { INDUSTRIES, MATERIALS, SERVICES } from '@/lib/catalog';
+import { getAllPosts } from '@/lib/blog';
+import { getAllProjects } from '@/lib/projects';
+import { SITE } from '@/lib/site';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.adpolymers.in';
-
-  // Core Landing Pages
-  const staticRoutes: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-  ];
-
-  // Core Service Capabilities Pages
-  const services = [
-    'plastic-injection-moulding',
-    'insert-moulding',
-    'overmoulding',
-    'rapid-prototyping',
-    'tooling-and-mould-design',
-  ];
-
-  const serviceRoutes: MetadataRoute.Sitemap = services.map((slug) => ({
-    url: `${baseUrl}/services/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly',
-    priority: 0.8,
-  }));
-
-  // Resin & Material Specification Pages
-  const materials = [
-    'polycarbonate-pc',
-    'abs-injection-moulding',
-    'nylon-pa6',
-    'polypropylene-pp',
-    'acetal-pom',
-    'peek-moulding',
-  ];
-
-  const materialRoutes: MetadataRoute.Sitemap = materials.map((slug) => ({
-    url: `${baseUrl}/materials/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly',
-    priority: 0.7,
-  }));
-
-  // Industry Vertical Landing Pages
-  const industries = [
-    'medical-device-moulding',
-    'automotive-plastic-components',
-    'electronics-enclosures',
-    'consumer-goods',
-  ];
-
-  const industryRoutes: MetadataRoute.Sitemap = industries.map((slug) => ({
-    url: `${baseUrl}/industries/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly',
-    priority: 0.7,
-  }));
-
+// Only list URLs that really exist — every entry here must return HTTP 200.
+export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date();
+  const u = (path: string, priority: number, changeFrequency: 'weekly' | 'monthly' = 'monthly', lastModified: Date = now) => ({
+    url: `${SITE.url}${path}`,
+    lastModified,
+    changeFrequency,
+    priority,
+  });
+  const date = (d: string) => (isNaN(Date.parse(d)) ? now : new Date(d));
   return [
-    ...staticRoutes,
-    ...serviceRoutes,
-    ...materialRoutes,
-    ...industryRoutes,
+    u('', 1, 'weekly'),
+    u('/services', 0.9),
+    ...SERVICES.map((s) => u(`/services/${s.slug}`, 0.8)),
+    u('/industries', 0.9),
+    ...INDUSTRIES.map((i) => u(`/industries/${i.slug}`, 0.8)),
+    u('/materials', 0.8),
+    ...MATERIALS.map((m) => u(`/materials/${m.slug}`, 0.7)),
+    u('/projects', 0.8, 'weekly'),
+    ...getAllProjects().map((p) => u(`/projects/${p.slug}`, 0.7, 'monthly', date(p.date))),
+    u('/tools', 0.7),
+    u('/tools/instant-quote', 0.9),
+    u('/tools/clamping-force-calculator', 0.8),
+    u('/blog', 0.7, 'weekly'),
+    ...getAllPosts().map((p) => u(`/blog/${p.slug}`, 0.6, 'monthly', date(p.date))),
+    u('/contact', 0.9),
   ];
 }

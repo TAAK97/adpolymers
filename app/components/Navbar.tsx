@@ -11,8 +11,10 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Services', href: '/services' },
+    { name: 'Industries', href: '/industries' },
     { name: 'Materials', href: '/materials' },
-    { name: 'OEM Partners', href: '/industries' },
+    { name: 'Projects', href: '/projects' },
+    { name: 'Instant Quote', href: '/tools/instant-quote' },
     { name: 'Blog', href: '/blog' },
   ];
 
@@ -38,9 +40,9 @@ export default function Navbar() {
 </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
           {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
             return (
               <Link
                 key={link.href}
@@ -64,7 +66,7 @@ export default function Navbar() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-slate-400 hover:text-white p-2"
+          className="lg:hidden text-slate-400 hover:text-white p-2"
           aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -73,7 +75,7 @@ export default function Navbar() {
 
       {/* Mobile Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-950 border-b border-slate-800 px-6 py-6 space-y-4">
+        <div className="lg:hidden bg-slate-950 border-b border-slate-800 px-6 py-6 space-y-4">
           {navLinks.map((link) => (
             <Link
               key={link.href}
