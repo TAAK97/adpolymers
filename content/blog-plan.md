@@ -5,7 +5,7 @@ Reorder, add or remove topics freely. Keep one line per topic: `- [ ] Title | ma
 
 ## Material selection
 - [x] PA66 vs POM for Automotive Clips and Fasteners: How to Choose | PA66 vs POM | /materials/nylon-pa6, /materials/acetal-pom → `pa66-vs-pom-automotive-clips`
-- [ ] Why Glass-Filled Nylon Parts Warp, and How to Prevent It | glass filled nylon warpage | /materials/nylon-pa6, /services/tooling-and-mould-design
+- [x] Why Glass-Filled Nylon Parts Warp, and How to Prevent It | glass filled nylon warpage | /materials/nylon-pa6, /services/tooling-and-mould-design → `glass-filled-nylon-warpage`
 - [ ] SAN vs Polycarbonate for Clear Water Filter Housings | SAN vs polycarbonate | /materials/san-moulding, /materials/polycarbonate-pc, /industries/water-filtration-components
 - [ ] Food-Grade Plastics for Water Purifier Parts: What Buyers Should Ask | food grade plastic for water purifier | /industries/water-filtration-components
 - [ ] ABS vs PP for Small Housings and Covers | ABS vs PP | /materials/abs-injection-moulding, /materials/polypropylene-pp
